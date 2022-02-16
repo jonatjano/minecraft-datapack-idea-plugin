@@ -14,7 +14,7 @@
   </change-notes>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html for description -->
-  <idea-version since-build="173.0"/>
+  <idea-version since-build="182.3341.11"/>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
        on how to target different products -->
@@ -22,10 +22,13 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <fileType name="Minecraft function"
-              implementationClass="com.jonatjano.minecraft_idea_plugin.McFunctionFileType"
+              implementationClass="org.jonatjano.mclang.McFunctionFileType"
               fieldName="INSTANCE"
               language="Minecraft function"
               extensions="mcfunction"/>
+
+    <lang.parserDefinition language="Minecraft function"
+                           implementationClass="org.jonatjano.mclang.McFunctionParserDefinition"/>
   </extensions>
 
   <actions>

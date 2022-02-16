@@ -1,4 +1,4 @@
-package com.jonatjano.minecraft_idea_plugin;
+package org.jonatjano.mclang;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.NotNull;
