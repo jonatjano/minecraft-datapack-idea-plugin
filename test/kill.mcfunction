@@ -1,0 +1,2 @@
+kill @a
+kill jonatjano

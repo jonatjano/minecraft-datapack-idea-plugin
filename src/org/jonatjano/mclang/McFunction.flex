@@ -16,25 +16,34 @@ import org.jonatjano.mclang.psi.McFunctionTypes;
 %eof}
 
 CRLF=\R
-WHITE_SPACE=[ ]
+WSPACE=[ ]
 COMMENT="#"[^\r\n]*
-ENTITY_NAME=[^ \r\n]+
+PLAYER_PSEUDO=[a-zA-Z0-9_]{3,16}
+REEL=-?[0-9]+(\.[0-9]+)?
 
-%state WAITING_VALUE
+%state COMMAND
 
 %%
 
-<YYINITIAL> {COMMENT}                                       { yybegin(YYINITIAL); return McFunctionTypes.COMMENT; }
+<YYINITIAL> {COMMENT}                                       { return McFunctionTypes.COMMENT; }
 
-<WAITING_VALUE> {WHITE_SPACE}                               { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
+<YYINITIAL> "tp"|"teleport"                                 { yybegin(COMMAND); return McFunctionTypes.TELEPORT; }
+<YYINITIAL> "kill"                                          { yybegin(COMMAND); return McFunctionTypes.KILL; }
 
-<YYINITIAL> "test"                                          { yybegin(YYINITIAL); return McFunctionTypes.TEST; }
-<YYINITIAL> "tp"|"teleport"                                 { yybegin(YYINITIAL); return McFunctionTypes.TELEPORT; }
+<COMMAND> "eyes"|"feet"                                     { return McFunctionTypes.ENTITY_ANCHOR; }
+<COMMAND> "entity"                                          { return McFunctionTypes.TOK_ENTITY; }
+<COMMAND> "facing"                                          { return McFunctionTypes.TOK_FACING; }
 
-<YYINITIAL> {ENTITY_NAME}                                   { yybegin(YYINITIAL); return McFunctionTypes.ENTITY; }
+<COMMAND> {REEL}{WSPACE}{REEL}{WSPACE}{REEL}                { return McFunctionTypes.VEC3; }
+<COMMAND> \^{REEL}?{WSPACE}\^{REEL}?{WSPACE}\^{REEL}?       { return McFunctionTypes.VEC3; }
+<COMMAND> \~{REEL}?{WSPACE}\~{REEL}?{WSPACE}\~{REEL}?       { return McFunctionTypes.VEC3; }
+<COMMAND> {REEL}                                            { return McFunctionTypes.ROTATION; }
 
-<YYINITIAL> {CRLF}                                          { yybegin(YYINITIAL); return McFunctionTypes.CRLF; }
+<COMMAND> "@a"                                              { return McFunctionTypes.MULTI_ENTITY; }
+<COMMAND> {PLAYER_PSEUDO}                                   { return McFunctionTypes.ENTITY; }
 
-{WHITE_SPACE}                                               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<YYINITIAL> {CRLF}                                          { return McFunctionTypes.CRLF; }
+<COMMAND> {CRLF}                                            { yybegin(YYINITIAL); return McFunctionTypes.CRLF; }
 
+{WSPACE}                                                    { return TokenType.WHITE_SPACE; }
 [^]                                                         { return TokenType.BAD_CHARACTER; }

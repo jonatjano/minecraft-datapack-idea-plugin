@@ -11,6 +11,7 @@
     elementTypeHolderClass="org.jonatjano.mclang.psi.McFunctionTypes"
     elementTypeClass="org.jonatjano.mclang.psi.McFunctionElementType"
     tokenTypeClass="org.jonatjano.mclang.psi.McFunctionTokenType"
+
 }
 //simpleFile ::= item_*
 //
@@ -22,8 +23,11 @@ mcFunctionFile ::= item_*
 
 private item_ ::= (command|COMMENT|CRLF)
 
-command ::= (tpCommand|testCommand)
+command ::= (killCommand|tpCommand)
+entities ::= (ENTITY|MULTI_ENTITY)
 
-testCommand ::= TEST
-tpCommand ::= TELEPORT( ENTITY)? ENTITY
-//tpCommand ::= ('tp'|'teleport')( ENTITY)? (ENTITY|VEC3(( ROTATION)|'facing'( VEC3|entity ENTITY( ENTITY_ANCHOR)?))?)
+killCommand ::= KILL entities
+
+tpCommand ::= TELEPORT ((entities ENTITY)|(entities tpVecArgs)|ENTITY|tpVecArgs)
+tpVecArgs ::= VEC3 (ROTATION|tpFacingArg)?
+tpFacingArg ::= TOK_FACING (VEC3|(TOK_ENTITY ENTITY)) ENTITY_ANCHOR?
