@@ -29,6 +29,10 @@
 
     <lang.parserDefinition language="Minecraft function"
                            implementationClass="org.jonatjano.mclang.McFunctionParserDefinition"/>
+
+    <lang.syntaxHighlighterFactory language="Minecraft function"
+                                   implementationClass="org.jonatjano.mclang.McFunctionSyntaxHighlighterFactory"/>
+
   </extensions>
 
   <actions>
