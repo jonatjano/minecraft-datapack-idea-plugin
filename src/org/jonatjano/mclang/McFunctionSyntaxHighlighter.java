@@ -14,27 +14,27 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 
 public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
 
-    public static final TextAttributesKey SEPARATOR =
-            createTextAttributesKey("SIMPLE_SEPARATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey CONSTANT =
-            createTextAttributesKey("SIMPLE_KEY", DefaultLanguageHighlighterColors.CONSTANT);
-    public static final TextAttributesKey VALUE =
-            createTextAttributesKey("SIMPLE_VALUE", DefaultLanguageHighlighterColors.STRING);
-    public static final TextAttributesKey COMMENT =
-            createTextAttributesKey("SIMPLE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    public static final TextAttributesKey NUMBER =
-            createTextAttributesKey("SIMPLE_BAD_CHARACTER", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey KEYWORD =
-            createTextAttributesKey("SIMPLE_BAD_CHARACTER", DefaultLanguageHighlighterColors.KEYWORD);
+            createTextAttributesKey("MC_FUNCTION_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey ENUM =
+            createTextAttributesKey("MC_FUNCTION_CONSTANT", DefaultLanguageHighlighterColors.CONSTANT);
+    public static final TextAttributesKey STRING =
+            createTextAttributesKey("MC_FUNCTION_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey COMMENT =
+            createTextAttributesKey("MC_FUNCTION_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
+    public static final TextAttributesKey NUMBER =
+            createTextAttributesKey("MC_FUNCTION_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
+    public static final TextAttributesKey COMMAND =
+            createTextAttributesKey("MC_FUNCTION_COMMAND", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey BAD_CHARACTER =
-            createTextAttributesKey("SIMPLE_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
+            createTextAttributesKey("MC_FUNCTION_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{BAD_CHARACTER};
-    private static final TextAttributesKey[] SEPARATOR_KEYS = new TextAttributesKey[]{SEPARATOR};
-    private static final TextAttributesKey[] CONSTANT_KEYS = new TextAttributesKey[]{CONSTANT};
-    private static final TextAttributesKey[] VALUE_KEYS = new TextAttributesKey[]{VALUE};
-    private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
     private static final TextAttributesKey[] KEYWORD_KEYS = new TextAttributesKey[]{KEYWORD};
+    private static final TextAttributesKey[] ENUM_KEYS = new TextAttributesKey[]{ENUM};
+    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
+    private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
+    private static final TextAttributesKey[] COMMAND_KEYS = new TextAttributesKey[]{COMMAND};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
@@ -52,18 +52,18 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType.equals(McFunctionTypes.KILL) ||
             tokenType.equals(McFunctionTypes.TELEPORT)) {
-            return KEYWORD_KEYS;
+            return COMMAND_KEYS;
         }
         if (tokenType.equals(McFunctionTypes.TOK_FACING) ||
             tokenType.equals(McFunctionTypes.TOK_ENTITY)) {
-            return SEPARATOR_KEYS;
+            return KEYWORD_KEYS;
         }
         if (tokenType.equals(McFunctionTypes.ENTITY_ANCHOR)) {
-            return CONSTANT_KEYS;
+            return ENUM_KEYS;
         }
         if (tokenType.equals(McFunctionTypes.ENTITY) ||
             tokenType.equals(McFunctionTypes.MULTI_ENTITY)) {
-            return VALUE_KEYS;
+            return STRING_KEYS;
         }
         if (tokenType.equals(McFunctionTypes.ROTATION) ||
             tokenType.equals(McFunctionTypes.VEC3)) {

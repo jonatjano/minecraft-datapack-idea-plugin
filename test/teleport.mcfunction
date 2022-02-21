@@ -23,3 +23,13 @@ teleport jonatjano 1 1 1 facing 1 1 1
 teleport jonatjano 1 1 1 facing entity servuc
 teleport jonatjano 1 1 1 facing entity servuc eyes
 teleport jonatjano 1 1 1 facing entity servuc feet
+
+teleport 1 1 1 42
+teleport 1 1 1 42.0
+teleport 1 1 1 -142
+teleport 1 1 1 -142.0
+
+teleport 1 1 1 facing 1 1 1
+teleport 1 1 1 facing entity servuc
+teleport 1 1 1 facing entity servuc eyes
+teleport 1 1 1 facing entity servuc feet

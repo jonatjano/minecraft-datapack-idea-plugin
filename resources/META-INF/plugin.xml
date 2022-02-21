@@ -21,18 +21,19 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <fileType name="Minecraft function"
+    <fileType name="Minecraft Function"
               implementationClass="org.jonatjano.mclang.McFunctionFileType"
               fieldName="INSTANCE"
-              language="Minecraft function"
+              language="Minecraft Function"
               extensions="mcfunction"/>
 
-    <lang.parserDefinition language="Minecraft function"
+    <lang.parserDefinition language="Minecraft Function"
                            implementationClass="org.jonatjano.mclang.McFunctionParserDefinition"/>
 
-    <lang.syntaxHighlighterFactory language="Minecraft function"
+    <lang.syntaxHighlighterFactory language="Minecraft Function"
                                    implementationClass="org.jonatjano.mclang.McFunctionSyntaxHighlighterFactory"/>
 
+    <colorSettingsPage implementation="org.jonatjano.mclang.McFunctionColorSettingsPage"/>
   </extensions>
 
   <actions>

@@ -16,13 +16,13 @@ public class McFunctionFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "Minecraft function";
+        return "Minecraft Function";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Minecraft function file";
+        return "Minecraft Function file";
     }
 
     @NotNull

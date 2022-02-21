@@ -20,6 +20,6 @@ public class McFunctionFile extends PsiFileBase {
 
     @Override
     public String toString() {
-        return "Minecraft function";
+        return McFunctionFileType.INSTANCE.getName();
     }
 }
