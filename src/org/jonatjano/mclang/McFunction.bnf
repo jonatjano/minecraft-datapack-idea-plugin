@@ -60,3 +60,18 @@ killCommand ::= KILL entities
 tpCommand ::= TELEPORT ((entities ENTITY)|(entities tpVecArgs)|ENTITY|tpVecArgs)
 tpVecArgs ::= VEC3 (ROTATION|tpFacingArg)?
 tpFacingArg ::= TOK_FACING (VEC3|(TOK_ENTITY ENTITY)) ENTITY_ANCHOR?
+
+/*
+single
+@p
+@r
+@a[limit=1]
+@e[limit=1]
+@s
+
+multi
+@p[limit!=1]
+@r[limit!=1]
+@a
+@e
+*/
