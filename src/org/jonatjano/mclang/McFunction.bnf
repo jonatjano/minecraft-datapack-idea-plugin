@@ -11,7 +11,6 @@
     elementTypeHolderClass="org.jonatjano.mclang.psi.McFunctionTypes"
     elementTypeClass="org.jonatjano.mclang.psi.McFunctionElementType"
     tokenTypeClass="org.jonatjano.mclang.psi.McFunctionTokenType"
-
 }
 //simpleFile ::= item_*
 //
@@ -23,8 +22,126 @@ mcFunctionFile ::= item_*
 
 private item_ ::= (command|COMMENT|CRLF)
 
-command ::= (killCommand|tpCommand)
-entities ::= (ENTITY|MULTI_ENTITY)
+vec3 ::= (FLOAT FLOAT FLOAT)|(TOK_TILDE FLOAT TOK_TILDE FLOAT TOK_TILDE FLOAT)|(TOK_CIRCONFLEX FLOAT TOK_CIRCONFLEX FLOAT TOK_CIRCONFLEX FLOAT)
+
+// ------------------------------------------------------------------
+// entity selectors
+// ------------------------------------------------------------------
+
+// positional
+position_argument ::= TOK_XYZ TOK_EQUAL FLOAT
+distance_argument ::= TOK_DISTANCE TOK_EQUAL U_FLOAT|U_FLOAT_RANGE
+volume_argument ::= TOK_DXYZ TOK_EQUAL FLOAT|FRACTIONAL
+
+// scoreboard value
+score_argument ::= TOK_SCORE TOK_EQUAL TOK_OPEN_CURLY WORD TOK_EQUAL INTEGER|INTEGER_RANGE(TOK_COMMA WORD TOK_EQUAL INTEGER|INTEGER_RANGE)*TOK_CLOSE_CURLY
+tag_argument ::= TOK_TAG TOK_EQUAL TOK_NEGATE?OPTIONAL_WORD
+team_argument ::= TOK_TEAM TOK_EQUAL TOK_NEGATE?OPTIONAL_WORD
+
+// traits
+sort_argument ::= TOK_SORT TOK_EQUAL SORT_KEYWORDS
+level_argument ::= TOK_LEVEL TOK_EQUAL INTEGER|INTEGER_RANGE
+gamemode_argument ::= TOK_GAMEMODE TOK_EQUAL TOK_NEGATE?GAMEMODE_KEYWORDS
+name_argument ::= TOK_NAME TOK_EQUAL TOK_NEGATE?WORD
+rotation_argument ::= TOK_XY_ROTATION TOK_EQUAL FLOAT|FLOAT_RANGE
+type_argument ::= TOK_TYPE TOK_EQUAL TOK_NEGATE?RESOURCE_LOCATION
+// TODO write it really
+nbt_argument ::= TOK_NBT TOK_EQUAL NBT_BODY
+advancements_argument ::= TOK_ADVANCEMENT TOK_EQUAL TOK_OPEN_CURLY RESOURCE_LOCATION TOK_EQUAL BOOLEAN|(TOK_OPEN_CURLY WORD TOK_EQUAL BOOLEAN(TOK_COMMA WORD TOK_EQUAL BOOLEAN)* TOK_CLOSE_CURLY)TOK_CLOSE_CURLY
+predicate_argument ::= TOK_PREDICATE TOK_EQUAL TOK_NEGATE?RESOURCE_LOCATION
+
+entity_selector_argument ::=
+    position_argument|distance_argument|volume_argument|
+    score_argument|tag_argument|team_argument|
+    sort_argument|level_argument|gamemode_argument|name_argument|rotation_argument|type_argument|nbt_argument|advancements_argument|predicate_argument
+
+limit_1_argument ::= TOK_LIMIT TOK_EQUAL INT_ONE
+limit_not_1_argument ::= TOK_LIMIT TOK_EQUAL INT_NOT_ONE
+
+no_limit_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument(TOK_COMMA entity_selector_argument)* TOK_CLOSE_SQUARE
+limit_1_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument|limit_1_argument(TOK_COMMA entity_selector_argument|limit_1_argument)* TOK_CLOSE_SQUARE
+limit_not_1_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument|limit_not_1_argument(TOK_COMMA entity_selector_argument|limit_not_1_argument)* TOK_CLOSE_SQUARE
+
+base_unique_entity_selector ::= TOK_AT_P|TOK_AT_R
+base_multi_entity_selector ::= TOK_AT_A|TOK_AT_E
+forced_unique_entity_selector ::= TOK_AT_S
+
+unique_entity_selector ::=
+    (base_unique_entity_selector no_limit_entity_selector_argument?)|
+    (base_unique_entity_selector limit_1_entity_selector_argument)|
+    (base_multi_entity_selector limit_1_entity_selector_argument)|
+    (forced_unique_entity_selector no_limit_entity_selector_argument?)|
+    (forced_unique_entity_selector limit_1_entity_selector_argument)
+multi_entity_selector ::=
+    (base_unique_entity_selector limit_not_1_entity_selector_argument)|
+    (base_multi_entity_selector no_limit_entity_selector_argument?)|
+    (base_multi_entity_selector limit_not_1_entity_selector_argument)
+
+entities ::= (unique_entity_selector|multi_entity_selector)
+entity ::= unique_entity_selector|PLAYER_PSEUDO|UUID
+
+// ------------------------------------------------------------------
+// commands
+// ------------------------------------------------------------------
+
+/*
+// ------------------------------------------------------------------
+// entity selectors
+// ------------------------------------------------------------------
+
+// positional
+POSITION_ARGUMENT=[xyz]={FLOAT}
+DISTANCE_ARGUMENT=distance={U_FLOAT}|{U_FLOAT_RANGE}
+VOLUME_ARGUMENT=d[xyz]={FLOAT}|{FRACTIONAL}
+
+// scoreboard value
+SCORE_ARGUMENT=score=\{\w+={INTEGER}|{INTEGER_RANGE}(,\w+={INTEGER}|{INTEGER_RANGE})*\}
+TAG_ARGUMENT=tag=\!?\w*
+TEAM_ARGUMENT=team=\!?\w*
+
+// traits
+SORT_ARGUMENT=sort=(nearest)|(furthest)|(random)|(arbitrary)
+LEVEL_ARGUMENT=level={INTEGER}|{INTEGER_RANGE}
+GAMEMODE_ARGUMENT=gamemode=\!?(spectator)|(survival)|(creative)|(adventure)
+NAME_ARGUMENT=name=\!?\w+
+ROTATION_ARGUMENT=[xy]_rotation={FLOAT}|{FLOAT_RANGE}
+TYPE_ARGUMENT=type=\!?{RESOURCE_LOCATION}
+// TODO write it really
+NBT_ARGUMENT=nbt=\{.*\}
+ADVANCEMENTS_ARGUMENT=advancements=\{{RESOURCE_LOCATION}={BOOLEAN}|(\{\w+={BOOLEAN}\})\}
+PREDICATE_ARGUMENT=predicate=\!?{RESOURCE_LOCATION}
+
+// compound
+ENTITY_SELECTOR_ARGUMENT=
+    {POSITION_ARGUMENT}|{DISTANCE_ARGUMENT}|{VOLUME_ARGUMENT}|
+    {SCORE_ARGUMENT}|{TAG_ARGUMENT}|{TEAM_ARGUMENT}|
+    {SORT_ARGUMENT}|{LEVEL_ARGUMENT}|{GAMEMODE_ARGUMENT}|{NAME_ARGUMENT}|{ROTATION_ARGUMENT}|{TYPE_ARGUMENT}|{NBT_ARGUMENT}|{ADVANCEMENTS_ARGUMENT}|{PREDICATE_ARGUMENT}
+
+LIMIT_1_ARGUMENT=limit=1
+LIMIT_NOT_1_ARGUMENT=limit=([02-9]|\d\d+)
+
+NO_LIMIT_ENTITY_SELECTOR_ARGUMENT=\[{ENTITY_SELECTOR_ARGUMENT}(,{ENTITY_SELECTOR_ARGUMENT})*\]
+LIMIT_1_ENTITY_SELECTOR_ARGUMENT=\[{ENTITY_SELECTOR_ARGUMENT}(,({ENTITY_SELECTOR_ARGUMENT}|{LIMIT_1_ARGUMENT}))*\]
+LIMIT_NOT_1_ENTITY_SELECTOR_ARGUMENT=\[{ENTITY_SELECTOR_ARGUMENT}(,({ENTITY_SELECTOR_ARGUMENT}|{LIMIT_NOT_1_ARGUMENT}))*\]
+
+BASE_LIMIT_1_SELECTOR=(@p)|(@r)
+BASE_LIMIT_NOT_1_SELECTOR=(@a)|(@e)
+FORCED_LIMIT_1_SELECTOR=@s
+
+LIMIT_1_SELECTOR=
+    ({BASE_LIMIT_1_SELECTOR}{NO_LIMIT_ENTITY_SELECTOR_ARGUMENT}?)|
+    ({BASE_LIMIT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)|
+
+    ({BASE_LIMIT_NOT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)|
+
+    ({FORCED_LIMIT_1_SELECTOR}{NO_LIMIT_ENTITY_SELECTOR_ARGUMENT}?)|
+    ({FORCED_LIMIT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)
+
+LIMIT_NOT_1_SELECTOR=
+    ({BASE_LIMIT_1_SELECTOR}{LIMIT_NOT_1_ENTITY_SELECTOR_ARGUMENT}?)|
+    ({BASE_LIMIT_NOT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)|
+    ({BASE_LIMIT_NOT_1_SELECTOR}{LIMIT_NOT_1_ENTITY_SELECTOR_ARGUMENT}?)
+*/
 
 // advancement
 // advancement (grant|revoke) <targets> everything
@@ -35,6 +152,7 @@ entities ::= (ENTITY|MULTI_ENTITY)
 // <targets> entities
 // <advancement> resource_location
 // <criterion> string
+//advancementCommand := ADVANCEMENT TOK_GRANT_OR_REVOKE entities (TOK_EVERYTHING|(TOK_ONLY RESOURCE_LOCATION CRITERION?)|(TOK_ADVANCEMENT_LIMITS RESOURCE_LOCATION))
 
 // attribute
 // attribute <target> <attribute> get [<scale>]
@@ -55,11 +173,14 @@ entities ::= (ENTITY|MULTI_ENTITY)
 // <targets> players
 // <reason> string_with_selectors
 
-killCommand ::= KILL entities
+command ::= (killCommand|tpCommand) {recoverWhile="command_recover"}
+private command_recover ::= !CRLF
 
-tpCommand ::= TELEPORT ((entities ENTITY)|(entities tpVecArgs)|ENTITY|tpVecArgs)
-tpVecArgs ::= VEC3 (ROTATION|tpFacingArg)?
-tpFacingArg ::= TOK_FACING (VEC3|(TOK_ENTITY ENTITY)) ENTITY_ANCHOR?
+killCommand ::= COMMAND_KILL entities {pin=1}
+
+tpCommand ::= COMMAND_TELEPORT ((entities entity)|(entities tpVecArgs)|entity|tpVecArgs) {pin=1}
+tpVecArgs ::= vec3 (FLOAT|tpFacingArg)?
+tpFacingArg ::= TOK_FACING (vec3|(TOK_ENTITY entity)) ENTITY_ANCHOR?
 
 /*
 single

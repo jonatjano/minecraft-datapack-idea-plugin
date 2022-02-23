@@ -50,8 +50,8 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType.equals(McFunctionTypes.COMMENT)) {
             return COMMENT_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.KILL) ||
-            tokenType.equals(McFunctionTypes.TELEPORT)) {
+        if (tokenType.equals(McFunctionTypes.COMMAND_KILL) ||
+            tokenType.equals(McFunctionTypes.COMMAND_TELEPORT)) {
             return COMMAND_KEYS;
         }
         if (tokenType.equals(McFunctionTypes.TOK_FACING) ||
@@ -61,12 +61,10 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType.equals(McFunctionTypes.ENTITY_ANCHOR)) {
             return ENUM_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.ENTITY) ||
-            tokenType.equals(McFunctionTypes.MULTI_ENTITY)) {
+        if (tokenType.equals(McFunctionTypes.ENTITY)) {
             return STRING_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.ROTATION) ||
-            tokenType.equals(McFunctionTypes.VEC3)) {
+        if (tokenType.equals(McFunctionTypes.VEC_3)) {
             return NUMBER_KEYS;
         }
         if (tokenType.equals(TokenType.BAD_CHARACTER)) {
