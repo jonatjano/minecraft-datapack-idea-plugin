@@ -22,41 +22,54 @@ mcFunctionFile ::= item_*
 
 private item_ ::= (command|COMMENT|CRLF)
 
-vec3 ::= (FLOAT FLOAT FLOAT)|(TOK_TILDE FLOAT TOK_TILDE FLOAT TOK_TILDE FLOAT)|(TOK_CIRCONFLEX FLOAT TOK_CIRCONFLEX FLOAT TOK_CIRCONFLEX FLOAT)
+vec3 ::= (float float float)|(TOK_TILDE float TOK_TILDE float TOK_TILDE float)|(TOK_CIRCONFLEX float TOK_CIRCONFLEX float TOK_CIRCONFLEX float)
+integer ::= INTEGER_ONE|INTEGER_NOT_ONE|INTEGER_SIGNED
+u_float ::= U_FLOAT_RULE|integer
+float ::= u_float|FLOAT_RULE
+integer_range ::= (integer TOK_RANGE integer)|(integer TOK_RANGE)|(TOK_RANGE integer)|integer
+u_float_range ::= (u_float TOK_RANGE u_float)|(u_float TOK_RANGE)|(TOK_RANGE u_float)|u_float
+float_range ::= (float TOK_RANGE float)|(float TOK_RANGE)|(TOK_RANGE float)|float
+
+fractional ::= float (TOK_FRACTIONAL float)?
+resource_location ::= RESOURCE_LOCATION_RULE|word
+word ::= PLAYER_PSEUDO|WORD_RULE|GAMEMODE_KEYWORDS|ENTITY_ANCHOR
+
+nbt_object ::= TOK_OPEN_CURLY word TOK_COLON nbt_value(TOK_COMMA word TOK_COLON nbt_value)* TOK_CLOSE_CURLY
+nbt_array ::= TOK_OPEN_SQUARE (ARRAY_TYPE_MARKER TOK_SEMI_COLON)? (nbt_value(TOK_COMMA nbt_value)*)?
+nbt_value ::= nbt_object|nbt_array|BOOLEAN|integer|float|STRING
 
 // ------------------------------------------------------------------
 // entity selectors
 // ------------------------------------------------------------------
 
 // positional
-position_argument ::= TOK_XYZ TOK_EQUAL FLOAT
-distance_argument ::= TOK_DISTANCE TOK_EQUAL U_FLOAT|U_FLOAT_RANGE
-volume_argument ::= TOK_DXYZ TOK_EQUAL FLOAT|FRACTIONAL
+position_argument ::= SELECTOR_ARGUMENT_XYZ TOK_EQUAL float
+distance_argument ::= SELECTOR_ARGUMENT_DISTANCE TOK_EQUAL u_float_range
+volume_argument ::= SELECTOR_ARGUMENT_DXYZ TOK_EQUAL fractional
 
 // scoreboard value
-score_argument ::= TOK_SCORE TOK_EQUAL TOK_OPEN_CURLY WORD TOK_EQUAL INTEGER|INTEGER_RANGE(TOK_COMMA WORD TOK_EQUAL INTEGER|INTEGER_RANGE)*TOK_CLOSE_CURLY
-tag_argument ::= TOK_TAG TOK_EQUAL TOK_NEGATE?OPTIONAL_WORD
-team_argument ::= TOK_TEAM TOK_EQUAL TOK_NEGATE?OPTIONAL_WORD
+scores_argument ::= SELECTOR_ARGUMENT_SCORES TOK_EQUAL TOK_OPEN_CURLY word TOK_EQUAL integer_range(TOK_COMMA word TOK_EQUAL integer_range)*TOK_CLOSE_CURLY
+tag_argument ::= SELECTOR_ARGUMENT_TAG TOK_EQUAL TOK_NEGATE?word?
+team_argument ::= SELECTOR_ARGUMENT_TEAM TOK_EQUAL TOK_NEGATE?word?
 
 // traits
-sort_argument ::= TOK_SORT TOK_EQUAL SORT_KEYWORDS
-level_argument ::= TOK_LEVEL TOK_EQUAL INTEGER|INTEGER_RANGE
-gamemode_argument ::= TOK_GAMEMODE TOK_EQUAL TOK_NEGATE?GAMEMODE_KEYWORDS
-name_argument ::= TOK_NAME TOK_EQUAL TOK_NEGATE?WORD
-rotation_argument ::= TOK_XY_ROTATION TOK_EQUAL FLOAT|FLOAT_RANGE
-type_argument ::= TOK_TYPE TOK_EQUAL TOK_NEGATE?RESOURCE_LOCATION
-// TODO write it really
-nbt_argument ::= TOK_NBT TOK_EQUAL NBT_BODY
-advancements_argument ::= TOK_ADVANCEMENT TOK_EQUAL TOK_OPEN_CURLY RESOURCE_LOCATION TOK_EQUAL BOOLEAN|(TOK_OPEN_CURLY WORD TOK_EQUAL BOOLEAN(TOK_COMMA WORD TOK_EQUAL BOOLEAN)* TOK_CLOSE_CURLY)TOK_CLOSE_CURLY
-predicate_argument ::= TOK_PREDICATE TOK_EQUAL TOK_NEGATE?RESOURCE_LOCATION
+sort_argument ::= SELECTOR_ARGUMENT_SORT TOK_EQUAL SORT_KEYWORDS
+level_argument ::= SELECTOR_ARGUMENT_LEVEL TOK_EQUAL integer_range
+gamemode_argument ::= SELECTOR_ARGUMENT_GAMEMODE TOK_EQUAL TOK_NEGATE?GAMEMODE_KEYWORDS
+name_argument ::= SELECTOR_ARGUMENT_NAME TOK_EQUAL TOK_NEGATE?word
+rotation_argument ::= SELECTOR_ARGUMENT_XY_ROTATION TOK_EQUAL float_range
+type_argument ::= SELECTOR_ARGUMENT_TYPE TOK_EQUAL TOK_NEGATE?resource_location
+nbt_argument ::= SELECTOR_ARGUMENT_NBT TOK_EQUAL nbt_object
+advancements_argument ::= SELECTOR_ARGUMENT_ADVANCEMENTS TOK_EQUAL TOK_OPEN_CURLY resource_location TOK_EQUAL (BOOLEAN|(TOK_OPEN_CURLY word TOK_EQUAL BOOLEAN(TOK_COMMA word TOK_EQUAL BOOLEAN)* TOK_CLOSE_CURLY))TOK_CLOSE_CURLY
+predicate_argument ::= SELECTOR_ARGUMENT_PREDICATE TOK_EQUAL TOK_NEGATE?resource_location
 
 entity_selector_argument ::=
     position_argument|distance_argument|volume_argument|
-    score_argument|tag_argument|team_argument|
+    scores_argument|tag_argument|team_argument|
     sort_argument|level_argument|gamemode_argument|name_argument|rotation_argument|type_argument|nbt_argument|advancements_argument|predicate_argument
 
-limit_1_argument ::= TOK_LIMIT TOK_EQUAL INT_ONE
-limit_not_1_argument ::= TOK_LIMIT TOK_EQUAL INT_NOT_ONE
+limit_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_ONE
+limit_not_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_NOT_ONE
 
 no_limit_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument(TOK_COMMA entity_selector_argument)* TOK_CLOSE_SQUARE
 limit_1_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument|limit_1_argument(TOK_COMMA entity_selector_argument|limit_1_argument)* TOK_CLOSE_SQUARE
@@ -77,7 +90,7 @@ multi_entity_selector ::=
     (base_multi_entity_selector no_limit_entity_selector_argument?)|
     (base_multi_entity_selector limit_not_1_entity_selector_argument)
 
-entities ::= (unique_entity_selector|multi_entity_selector)
+entities ::= multi_entity_selector|entity
 entity ::= unique_entity_selector|PLAYER_PSEUDO|UUID
 
 // ------------------------------------------------------------------
@@ -179,7 +192,7 @@ private command_recover ::= !CRLF
 killCommand ::= COMMAND_KILL entities {pin=1}
 
 tpCommand ::= COMMAND_TELEPORT ((entities entity)|(entities tpVecArgs)|entity|tpVecArgs) {pin=1}
-tpVecArgs ::= vec3 (FLOAT|tpFacingArg)?
+tpVecArgs ::= vec3 (float|tpFacingArg)?
 tpFacingArg ::= TOK_FACING (vec3|(TOK_ENTITY entity)) ENTITY_ANCHOR?
 
 /*
@@ -187,7 +200,7 @@ single
 @p
 @r
 @a[limit=1]
-@e[limit=1]
+@e[limit=1]FLOAT
 @s
 
 multi

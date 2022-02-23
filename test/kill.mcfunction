@@ -8,12 +8,12 @@ kill @r
 kill @s
 
 kill @e[distance=10]
-# kill @e[distance=8..16]
+kill @e[distance=8..16]
 
 kill @e[x=1,dx=4,y=2,dy=5,z=3,dz=6]
 kill @e[x=1,y=2,z=3,dx=0,dy=0,dz=0]
 kill @e[x=1,dx=4,y=2,dy=5,z=3,dz=6]
-kill @e[x=1,y=2,z=3,dx=0,dy=0,dz=0]
+kill @e[x=1,y=2,z=30,dx=0,dy=0,dz=0]
 
 kill @e[scores={myscore=10}]
 kill @e[scores={myscore=10..12}]
@@ -68,7 +68,7 @@ kill @e[type=!minecraft:zombie]
 
 kill @a[nbt={OnGround:true}]
 kill @e[type=sheep,nbt={Color:0b}]
-kill @e[type=item,nbt={Item:{id:\"minecraft:slime_ball\"}}]
+kill @e[type=item,nbt={Item:{id:"minecraft:slime_ball"}}]
 kill @e[nbt={Tags:[a,b]}]
 kill @e[tag=a,tag=b]
 
