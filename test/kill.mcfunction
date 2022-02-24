@@ -68,8 +68,8 @@ kill @e[type=!minecraft:zombie]
 
 kill @a[nbt={OnGround:true}]
 kill @e[type=sheep,nbt={Color:0b}]
-kill @e[type=item,nbt={Item:{id:"minecraft:slime_ball"}}]
-kill @e[nbt={Tags:[a,b]}]
+kill @e[type=item,nbt={Item:{id:"minec\\raft:sl\"ime_ball"}}]
+kill @e[nbt={Tags:["a",b]}]
 kill @e[tag=a,tag=b]
 
 kill @a[advancements={story/smelt_iron=true}]

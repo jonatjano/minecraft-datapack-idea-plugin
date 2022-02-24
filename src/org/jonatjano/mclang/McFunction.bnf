@@ -22,7 +22,7 @@ mcFunctionFile ::= item_*
 
 private item_ ::= (command|COMMENT|CRLF)
 
-vec3 ::= (float float float)|(TOK_TILDE float TOK_TILDE float TOK_TILDE float)|(TOK_CIRCONFLEX float TOK_CIRCONFLEX float TOK_CIRCONFLEX float)
+vec3 ::= (float float float)|(TOK_TILDE float? TOK_TILDE float? TOK_TILDE float?)|(TOK_CIRCONFLEX float? TOK_CIRCONFLEX float? TOK_CIRCONFLEX float?)
 integer ::= INTEGER_ONE|INTEGER_NOT_ONE|INTEGER_SIGNED
 u_float ::= U_FLOAT_RULE|integer
 float ::= u_float|FLOAT_RULE
@@ -31,12 +31,18 @@ u_float_range ::= (u_float TOK_RANGE u_float)|(u_float TOK_RANGE)|(TOK_RANGE u_f
 float_range ::= (float TOK_RANGE float)|(float TOK_RANGE)|(TOK_RANGE float)|float
 
 fractional ::= float (TOK_FRACTIONAL float)?
-resource_location ::= RESOURCE_LOCATION_RULE|word
+resource_location ::= (word TOK_COLON)? word (TOK_SLASH word)*
 word ::= PLAYER_PSEUDO|WORD_RULE|GAMEMODE_KEYWORDS|ENTITY_ANCHOR
+string_single_quote_child ::= TOK_SINGLE_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH)* TOK_SINGLE_QUOTE
+string_dual_quote_child ::= TOK_DUAL_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH)* TOK_DUAL_QUOTE
+string_single_quote_parent ::= TOK_SINGLE_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_BACKSLASH|string_dual_quote_child)* TOK_SINGLE_QUOTE
+string_dual_quote_parent ::= TOK_DUAL_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH|string_single_quote_child)* TOK_DUAL_QUOTE
+string_no_quote ::= (word|WHITE_SPACE)+
+string ::= string_single_quote_parent|string_dual_quote_parent|string_no_quote
 
 nbt_object ::= TOK_OPEN_CURLY word TOK_COLON nbt_value(TOK_COMMA word TOK_COLON nbt_value)* TOK_CLOSE_CURLY
-nbt_array ::= TOK_OPEN_SQUARE (ARRAY_TYPE_MARKER TOK_SEMI_COLON)? (nbt_value(TOK_COMMA nbt_value)*)?
-nbt_value ::= nbt_object|nbt_array|BOOLEAN|integer|float|STRING
+nbt_array ::= TOK_OPEN_SQUARE (ARRAY_TYPE_MARKER TOK_SEMI_COLON)? (nbt_value(TOK_COMMA nbt_value)*)? TOK_CLOSE_SQUARE
+nbt_value ::= nbt_object|nbt_array|BOOLEAN|integer|float|string
 
 // ------------------------------------------------------------------
 // entity selectors
@@ -71,24 +77,20 @@ entity_selector_argument ::=
 limit_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_ONE
 limit_not_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_NOT_ONE
 
-no_limit_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument(TOK_COMMA entity_selector_argument)* TOK_CLOSE_SQUARE
-limit_1_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument|limit_1_argument(TOK_COMMA entity_selector_argument|limit_1_argument)* TOK_CLOSE_SQUARE
-limit_not_1_entity_selector_argument ::= TOK_OPEN_SQUARE entity_selector_argument|limit_not_1_argument(TOK_COMMA entity_selector_argument|limit_not_1_argument)* TOK_CLOSE_SQUARE
+limit_1_entity_selector_argument ::= TOK_OPEN_SQUARE (limit_1_argument|entity_selector_argument)(TOK_COMMA (limit_1_argument|entity_selector_argument))* TOK_CLOSE_SQUARE
+limit_not_1_entity_selector_argument ::= TOK_OPEN_SQUARE (limit_not_1_argument|entity_selector_argument)(TOK_COMMA (limit_not_1_argument|entity_selector_argument))* TOK_CLOSE_SQUARE
 
 base_unique_entity_selector ::= TOK_AT_P|TOK_AT_R
 base_multi_entity_selector ::= TOK_AT_A|TOK_AT_E
 forced_unique_entity_selector ::= TOK_AT_S
 
 unique_entity_selector ::=
-    (base_unique_entity_selector no_limit_entity_selector_argument?)|
-    (base_unique_entity_selector limit_1_entity_selector_argument)|
+    (base_unique_entity_selector limit_1_entity_selector_argument?)|
     (base_multi_entity_selector limit_1_entity_selector_argument)|
-    (forced_unique_entity_selector no_limit_entity_selector_argument?)|
-    (forced_unique_entity_selector limit_1_entity_selector_argument)
+    (forced_unique_entity_selector limit_1_entity_selector_argument?)
 multi_entity_selector ::=
     (base_unique_entity_selector limit_not_1_entity_selector_argument)|
-    (base_multi_entity_selector no_limit_entity_selector_argument?)|
-    (base_multi_entity_selector limit_not_1_entity_selector_argument)
+    (base_multi_entity_selector limit_not_1_entity_selector_argument?)
 
 entities ::= multi_entity_selector|entity
 entity ::= unique_entity_selector|PLAYER_PSEUDO|UUID
