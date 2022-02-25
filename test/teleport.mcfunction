@@ -33,3 +33,10 @@ teleport 1 1 1 facing 1 1 1
 teleport 1 1 1 facing entity servuc
 teleport 1 1 1 facing entity servuc eyes
 teleport 1 1 1 facing entity servuc feet
+
+teleport @a[limit=3,sort=nearest] @a[limit=1,sort=nearest]
+teleport @p[limit=3] @p[limit=1]
+teleport @a[limit=4,sort=furthest] @a[limit=1,sort=furthest]
+teleport @a[limit=2,sort=random] @a[limit=1,sort=random]
+teleport @a[limit=2,sort=arbitrary] @a[limit=1,sort=arbitrary]
+teleport @r[limit=2] @r[limit=1]

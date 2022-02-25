@@ -38,6 +38,13 @@ kill @a[limit=2,sort=random]
 kill @a[limit=2,sort=arbitrary]
 kill @r[limit=2]
 
+kill @a[limit=1,sort=nearest]
+kill @p[limit=1]
+kill @a[limit=1,sort=furthest]
+kill @a[limit=1,sort=random]
+kill @a[limit=1,sort=arbitrary]
+kill @r[limit=1]
+
 kill @a[level=10]
 kill @a[level=8..16]
 

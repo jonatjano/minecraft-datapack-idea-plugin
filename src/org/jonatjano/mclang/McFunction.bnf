@@ -23,8 +23,9 @@ mcFunctionFile ::= item_*
 private item_ ::= (command|COMMENT|CRLF)
 
 vec3 ::= (float float float)|(TOK_TILDE float? TOK_TILDE float? TOK_TILDE float?)|(TOK_CIRCONFLEX float? TOK_CIRCONFLEX float? TOK_CIRCONFLEX float?)
-integer ::= INTEGER_ONE|INTEGER_NOT_ONE|INTEGER_SIGNED
-u_float ::= U_FLOAT_RULE|integer
+u_integer ::= INTEGER_ONE|INTEGER_NOT_ONE
+integer ::= u_integer|INTEGER_SIGNED
+u_float ::= U_FLOAT_RULE|u_integer
 float ::= u_float|FLOAT_RULE
 integer_range ::= (integer TOK_RANGE integer)|(integer TOK_RANGE)|(TOK_RANGE integer)|integer
 u_float_range ::= (u_float TOK_RANGE u_float)|(u_float TOK_RANGE)|(TOK_RANGE u_float)|u_float
@@ -69,94 +70,37 @@ nbt_argument ::= SELECTOR_ARGUMENT_NBT TOK_EQUAL nbt_object
 advancements_argument ::= SELECTOR_ARGUMENT_ADVANCEMENTS TOK_EQUAL TOK_OPEN_CURLY resource_location TOK_EQUAL (BOOLEAN|(TOK_OPEN_CURLY word TOK_EQUAL BOOLEAN(TOK_COMMA word TOK_EQUAL BOOLEAN)* TOK_CLOSE_CURLY))TOK_CLOSE_CURLY
 predicate_argument ::= SELECTOR_ARGUMENT_PREDICATE TOK_EQUAL TOK_NEGATE?resource_location
 
-entity_selector_argument ::=
+entity_selector_argument_no_limit ::=
     position_argument|distance_argument|volume_argument|
     scores_argument|tag_argument|team_argument|
     sort_argument|level_argument|gamemode_argument|name_argument|rotation_argument|type_argument|nbt_argument|advancements_argument|predicate_argument
+entity_selector_argument ::= entity_selector_argument_no_limit|limit_argument
 
-limit_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_ONE
-limit_not_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_NOT_ONE
+limit_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL u_integer {pin=1}
+limit_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_ONE {pin=1}
 
-limit_1_entity_selector_argument ::= TOK_OPEN_SQUARE (limit_1_argument|entity_selector_argument)(TOK_COMMA (limit_1_argument|entity_selector_argument))* TOK_CLOSE_SQUARE
-limit_not_1_entity_selector_argument ::= TOK_OPEN_SQUARE (limit_not_1_argument|entity_selector_argument)(TOK_COMMA (limit_not_1_argument|entity_selector_argument))* TOK_CLOSE_SQUARE
+limit_1_entity_selector_argument_block ::= TOK_OPEN_SQUARE (limit_1_argument|entity_selector_argument_no_limit)(TOK_COMMA (limit_1_argument|entity_selector_argument_no_limit))* TOK_CLOSE_SQUARE
+entity_selector_argument_block ::= TOK_OPEN_SQUARE (entity_selector_argument)(TOK_COMMA entity_selector_argument)* TOK_CLOSE_SQUARE
 
 base_unique_entity_selector ::= TOK_AT_P|TOK_AT_R
 base_multi_entity_selector ::= TOK_AT_A|TOK_AT_E
 forced_unique_entity_selector ::= TOK_AT_S
 
 unique_entity_selector ::=
-    (base_unique_entity_selector limit_1_entity_selector_argument?)|
-    (base_multi_entity_selector limit_1_entity_selector_argument)|
-    (forced_unique_entity_selector limit_1_entity_selector_argument?)
+    (base_unique_entity_selector limit_1_entity_selector_argument_block?)|
+    (base_multi_entity_selector limit_1_entity_selector_argument_block)|
+    (forced_unique_entity_selector limit_1_entity_selector_argument_block?)
 multi_entity_selector ::=
-    (base_unique_entity_selector limit_not_1_entity_selector_argument)|
-    (base_multi_entity_selector limit_not_1_entity_selector_argument?)
+    (base_unique_entity_selector entity_selector_argument_block?)|
+    (base_multi_entity_selector entity_selector_argument_block?)|
+    (forced_unique_entity_selector entity_selector_argument_block?)
 
-entities ::= multi_entity_selector|entity
+entities ::= multi_entity_selector|PLAYER_PSEUDO|UUID
 entity ::= unique_entity_selector|PLAYER_PSEUDO|UUID
 
 // ------------------------------------------------------------------
 // commands
 // ------------------------------------------------------------------
-
-/*
-// ------------------------------------------------------------------
-// entity selectors
-// ------------------------------------------------------------------
-
-// positional
-POSITION_ARGUMENT=[xyz]={FLOAT}
-DISTANCE_ARGUMENT=distance={U_FLOAT}|{U_FLOAT_RANGE}
-VOLUME_ARGUMENT=d[xyz]={FLOAT}|{FRACTIONAL}
-
-// scoreboard value
-SCORE_ARGUMENT=score=\{\w+={INTEGER}|{INTEGER_RANGE}(,\w+={INTEGER}|{INTEGER_RANGE})*\}
-TAG_ARGUMENT=tag=\!?\w*
-TEAM_ARGUMENT=team=\!?\w*
-
-// traits
-SORT_ARGUMENT=sort=(nearest)|(furthest)|(random)|(arbitrary)
-LEVEL_ARGUMENT=level={INTEGER}|{INTEGER_RANGE}
-GAMEMODE_ARGUMENT=gamemode=\!?(spectator)|(survival)|(creative)|(adventure)
-NAME_ARGUMENT=name=\!?\w+
-ROTATION_ARGUMENT=[xy]_rotation={FLOAT}|{FLOAT_RANGE}
-TYPE_ARGUMENT=type=\!?{RESOURCE_LOCATION}
-// TODO write it really
-NBT_ARGUMENT=nbt=\{.*\}
-ADVANCEMENTS_ARGUMENT=advancements=\{{RESOURCE_LOCATION}={BOOLEAN}|(\{\w+={BOOLEAN}\})\}
-PREDICATE_ARGUMENT=predicate=\!?{RESOURCE_LOCATION}
-
-// compound
-ENTITY_SELECTOR_ARGUMENT=
-    {POSITION_ARGUMENT}|{DISTANCE_ARGUMENT}|{VOLUME_ARGUMENT}|
-    {SCORE_ARGUMENT}|{TAG_ARGUMENT}|{TEAM_ARGUMENT}|
-    {SORT_ARGUMENT}|{LEVEL_ARGUMENT}|{GAMEMODE_ARGUMENT}|{NAME_ARGUMENT}|{ROTATION_ARGUMENT}|{TYPE_ARGUMENT}|{NBT_ARGUMENT}|{ADVANCEMENTS_ARGUMENT}|{PREDICATE_ARGUMENT}
-
-LIMIT_1_ARGUMENT=limit=1
-LIMIT_NOT_1_ARGUMENT=limit=([02-9]|\d\d+)
-
-NO_LIMIT_ENTITY_SELECTOR_ARGUMENT=\[{ENTITY_SELECTOR_ARGUMENT}(,{ENTITY_SELECTOR_ARGUMENT})*\]
-LIMIT_1_ENTITY_SELECTOR_ARGUMENT=\[{ENTITY_SELECTOR_ARGUMENT}(,({ENTITY_SELECTOR_ARGUMENT}|{LIMIT_1_ARGUMENT}))*\]
-LIMIT_NOT_1_ENTITY_SELECTOR_ARGUMENT=\[{ENTITY_SELECTOR_ARGUMENT}(,({ENTITY_SELECTOR_ARGUMENT}|{LIMIT_NOT_1_ARGUMENT}))*\]
-
-BASE_LIMIT_1_SELECTOR=(@p)|(@r)
-BASE_LIMIT_NOT_1_SELECTOR=(@a)|(@e)
-FORCED_LIMIT_1_SELECTOR=@s
-
-LIMIT_1_SELECTOR=
-    ({BASE_LIMIT_1_SELECTOR}{NO_LIMIT_ENTITY_SELECTOR_ARGUMENT}?)|
-    ({BASE_LIMIT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)|
-
-    ({BASE_LIMIT_NOT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)|
-
-    ({FORCED_LIMIT_1_SELECTOR}{NO_LIMIT_ENTITY_SELECTOR_ARGUMENT}?)|
-    ({FORCED_LIMIT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)
-
-LIMIT_NOT_1_SELECTOR=
-    ({BASE_LIMIT_1_SELECTOR}{LIMIT_NOT_1_ENTITY_SELECTOR_ARGUMENT}?)|
-    ({BASE_LIMIT_NOT_1_SELECTOR}{LIMIT_1_ENTITY_SELECTOR_ARGUMENT}?)|
-    ({BASE_LIMIT_NOT_1_SELECTOR}{LIMIT_NOT_1_ENTITY_SELECTOR_ARGUMENT}?)
-*/
 
 // advancement
 // advancement (grant|revoke) <targets> everything
