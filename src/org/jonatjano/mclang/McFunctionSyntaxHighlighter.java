@@ -54,8 +54,8 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
             tokenType.equals(McFunctionTypes.COMMAND_TELEPORT)) {
             return COMMAND_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.TOK_FACING) ||
-            tokenType.equals(McFunctionTypes.TOK_ENTITY)) {
+        if (tokenType.equals(McFunctionTypes.KEY_FACING) ||
+            tokenType.equals(McFunctionTypes.KEY_ENTITY)) {
             return KEYWORD_KEYS;
         }
         if (tokenType.equals(McFunctionTypes.ENTITY_ANCHOR)) {

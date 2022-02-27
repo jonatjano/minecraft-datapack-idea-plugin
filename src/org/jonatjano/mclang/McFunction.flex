@@ -34,47 +34,54 @@ UUID=\d{8}-\d{4}-\d{4}-\d{4}-\d{12}
 %%
 
 <YYINITIAL> {COMMENT}   { return McFunctionTypes.COMMENT; }
-<YYINITIAL> tp|teleport { yybegin(COMMAND); return McFunctionTypes.COMMAND_TELEPORT; }
+<YYINITIAL> ban         { yybegin(COMMAND); return McFunctionTypes.COMMAND_BAN; }
+<YYINITIAL> function    { yybegin(COMMAND); return McFunctionTypes.COMMAND_FUNCTION; }
+<YYINITIAL> gamemode    { yybegin(COMMAND); return McFunctionTypes.COMMAND_GAMEMODE; }
+<YYINITIAL> item        { yybegin(COMMAND); return McFunctionTypes.COMMAND_ITEM; }
 <YYINITIAL> kill        { yybegin(COMMAND); return McFunctionTypes.COMMAND_KILL; }
+<YYINITIAL> tp|teleport { yybegin(COMMAND); return McFunctionTypes.COMMAND_TELEPORT; }
 
 true|false|0b|1b  { return McFunctionTypes.BOOLEAN; }
 {INTEGER_ONE}     { return McFunctionTypes.INTEGER_ONE; }
 {INTEGER_NOT_ONE} { return McFunctionTypes.INTEGER_NOT_ONE; }
 {INTEGER}         { return McFunctionTypes.INTEGER_SIGNED; }
 {U_FLOAT}         { return McFunctionTypes.U_FLOAT_RULE; }
-{FLOAT}           { return McFunctionTypes.FLOAT_RULE; }
+{FLOAT}           { return McFunctionTypes.FLOAT_SIGNED; }
 
-\[   { return McFunctionTypes.TOK_OPEN_SQUARE; }
-\]   { return McFunctionTypes.TOK_CLOSE_SQUARE; }
-\{   { return McFunctionTypes.TOK_OPEN_CURLY; }
-\}   { return McFunctionTypes.TOK_CLOSE_CURLY; }
-\=   { return McFunctionTypes.TOK_EQUAL; }
-\,   { return McFunctionTypes.TOK_COMMA; }
-\.\. { return McFunctionTypes.TOK_RANGE; }
-\!   { return McFunctionTypes.TOK_NEGATE; }
-\^   { return McFunctionTypes.TOK_CIRCONFLEX; }
-\~   { return McFunctionTypes.TOK_TILDE; }
-\:   { return McFunctionTypes.TOK_COLON; }
-\;   { return McFunctionTypes.TOK_SEMI_COLON; }
-\/   { return McFunctionTypes.TOK_SLASH; }
+\[ { return McFunctionTypes.TOK_OPEN_SQUARE; }
+\] { return McFunctionTypes.TOK_CLOSE_SQUARE; }
+\{ { return McFunctionTypes.TOK_OPEN_CURLY; }
+\} { return McFunctionTypes.TOK_CLOSE_CURLY; }
+\= { return McFunctionTypes.TOK_EQUAL; }
+\, { return McFunctionTypes.TOK_COMMA; }
+\. { return McFunctionTypes.TOK_DOT; }
+\! { return McFunctionTypes.TOK_NEGATE; }
+\^ { return McFunctionTypes.TOK_CIRCONFLEX; }
+\~ { return McFunctionTypes.TOK_TILDE; }
+\: { return McFunctionTypes.TOK_COLON; }
+\; { return McFunctionTypes.TOK_SEMI_COLON; }
+\/ { return McFunctionTypes.TOK_SLASH; }
+\# { return McFunctionTypes.TOK_HASH; }
 
-//TOK_DUAL_QUOTE
+// strings
 <COMMAND> \" { yybegin(STRING); return McFunctionTypes.TOK_DUAL_QUOTE; }
 <STRING> \" { yybegin(COMMAND); return McFunctionTypes.TOK_DUAL_QUOTE; }
-//TOK_SINGLE_QUOTE
 <COMMAND> ' { yybegin(STRING); return McFunctionTypes.TOK_SINGLE_QUOTE; }
 <STRING> ' { yybegin(COMMAND); return McFunctionTypes.TOK_SINGLE_QUOTE; }
-//ANY_NO_QUOTE
 <STRING> [^\"'\\]+ { return McFunctionTypes.ANY_NO_QUOTE; }
-//TOK_CANCELLED_BACKSLASH
 <STRING> \\\\ { return McFunctionTypes.TOK_CANCELLED_BACKSLASH; }
-//TOK_CANCELLED_DUAL_QUOTE
 <STRING> \\\" { return McFunctionTypes.TOK_CANCELLED_DUAL_QUOTE; }
-//TOK_CANCELLED_SINGLE_QUOTE
 <STRING> \\' { return McFunctionTypes.TOK_CANCELLED_SINGLE_QUOTE; }
 
-entity { return McFunctionTypes.TOK_ENTITY; }
-facing { return McFunctionTypes.TOK_FACING; }
+<COMMAND> entity  { return McFunctionTypes.KEY_ENTITY; }
+<COMMAND> facing  { return McFunctionTypes.KEY_FACING; }
+<COMMAND> clear   { return McFunctionTypes.KEY_CLEAR; }
+<COMMAND> give    { return McFunctionTypes.KEY_GIVE; }
+<COMMAND> modify  { return McFunctionTypes.KEY_MODIFY; }
+<COMMAND> replace { return McFunctionTypes.KEY_REPLACE; }
+<COMMAND> block   { return McFunctionTypes.KEY_BLOCK; }
+<COMMAND> with    { return McFunctionTypes.KEY_WITH; }
+<COMMAND> from    { return McFunctionTypes.KEY_FROM; }
 
 x|y|z          { return McFunctionTypes.SELECTOR_ARGUMENT_XYZ; }
 distance       { return McFunctionTypes.SELECTOR_ARGUMENT_DISTANCE; }
