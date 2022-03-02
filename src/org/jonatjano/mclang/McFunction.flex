@@ -48,40 +48,40 @@ true|false|0b|1b  { return McFunctionTypes.BOOLEAN; }
 {U_FLOAT}         { return McFunctionTypes.U_FLOAT_RULE; }
 {FLOAT}           { return McFunctionTypes.FLOAT_SIGNED; }
 
-\[ { return McFunctionTypes.TOK_OPEN_SQUARE; }
-\] { return McFunctionTypes.TOK_CLOSE_SQUARE; }
-\{ { return McFunctionTypes.TOK_OPEN_CURLY; }
-\} { return McFunctionTypes.TOK_CLOSE_CURLY; }
-\= { return McFunctionTypes.TOK_EQUAL; }
-\, { return McFunctionTypes.TOK_COMMA; }
-\. { return McFunctionTypes.TOK_DOT; }
-\! { return McFunctionTypes.TOK_NEGATE; }
-\^ { return McFunctionTypes.TOK_CIRCONFLEX; }
-\~ { return McFunctionTypes.TOK_TILDE; }
-\: { return McFunctionTypes.TOK_COLON; }
-\; { return McFunctionTypes.TOK_SEMI_COLON; }
-\/ { return McFunctionTypes.TOK_SLASH; }
-\# { return McFunctionTypes.TOK_HASH; }
+\[ { return McFunctionTypes.SYMBOL_OPEN_SQUARE; }
+\] { return McFunctionTypes.SYMBOL_CLOSE_SQUARE; }
+\{ { return McFunctionTypes.SYMBOL_OPEN_CURLY; }
+\} { return McFunctionTypes.SYMBOL_CLOSE_CURLY; }
+\= { return McFunctionTypes.SYMBOL_EQUAL; }
+\, { return McFunctionTypes.SYMBOL_COMMA; }
+\. { return McFunctionTypes.SYMBOL_DOT; }
+\! { return McFunctionTypes.SYMBOL_NEGATE; }
+\^ { return McFunctionTypes.SYMBOL_CIRCONFLEX; }
+\~ { return McFunctionTypes.SYMBOL_TILDE; }
+\: { return McFunctionTypes.SYMBOL_COLON; }
+\; { return McFunctionTypes.SYMBOL_SEMI_COLON; }
+\/ { return McFunctionTypes.SYMBOL_SLASH; }
+\# { return McFunctionTypes.SYMBOL_HASH; }
 
 // strings
-<COMMAND> \" { yybegin(STRING); return McFunctionTypes.TOK_DUAL_QUOTE; }
-<STRING> \" { yybegin(COMMAND); return McFunctionTypes.TOK_DUAL_QUOTE; }
-<COMMAND> ' { yybegin(STRING); return McFunctionTypes.TOK_SINGLE_QUOTE; }
-<STRING> ' { yybegin(COMMAND); return McFunctionTypes.TOK_SINGLE_QUOTE; }
+<COMMAND> \" { yybegin(STRING); return McFunctionTypes.SYMBOL_DUAL_QUOTE; }
+<STRING> \" { yybegin(COMMAND); return McFunctionTypes.SYMBOL_DUAL_QUOTE; }
+<COMMAND> ' { yybegin(STRING); return McFunctionTypes.SYMBOL_SINGLE_QUOTE; }
+<STRING> ' { yybegin(COMMAND); return McFunctionTypes.SYMBOL_SINGLE_QUOTE; }
 <STRING> [^\"'\\]+ { return McFunctionTypes.ANY_NO_QUOTE; }
-<STRING> \\\\ { return McFunctionTypes.TOK_CANCELLED_BACKSLASH; }
-<STRING> \\\" { return McFunctionTypes.TOK_CANCELLED_DUAL_QUOTE; }
-<STRING> \\' { return McFunctionTypes.TOK_CANCELLED_SINGLE_QUOTE; }
+<STRING> \\\\ { return McFunctionTypes.SYMBOL_CANCELLED_BACKSLASH; }
+<STRING> \\\" { return McFunctionTypes.SYMBOL_CANCELLED_DUAL_QUOTE; }
+<STRING> \\' { return McFunctionTypes.SYMBOL_CANCELLED_SINGLE_QUOTE; }
 
-<COMMAND> entity  { return McFunctionTypes.KEY_ENTITY; }
-<COMMAND> facing  { return McFunctionTypes.KEY_FACING; }
-<COMMAND> clear   { return McFunctionTypes.KEY_CLEAR; }
-<COMMAND> give    { return McFunctionTypes.KEY_GIVE; }
-<COMMAND> modify  { return McFunctionTypes.KEY_MODIFY; }
-<COMMAND> replace { return McFunctionTypes.KEY_REPLACE; }
-<COMMAND> block   { return McFunctionTypes.KEY_BLOCK; }
-<COMMAND> with    { return McFunctionTypes.KEY_WITH; }
-<COMMAND> from    { return McFunctionTypes.KEY_FROM; }
+<COMMAND> entity  { return McFunctionTypes.KEYWORD_ENTITY; }
+<COMMAND> facing  { return McFunctionTypes.KEYWORD_FACING; }
+<COMMAND> clear   { return McFunctionTypes.KEYWORD_CLEAR; }
+<COMMAND> give    { return McFunctionTypes.KEYWORD_GIVE; }
+<COMMAND> modify  { return McFunctionTypes.KEYWORD_MODIFY; }
+<COMMAND> replace { return McFunctionTypes.KEYWORD_REPLACE; }
+<COMMAND> block   { return McFunctionTypes.KEYWORD_BLOCK; }
+<COMMAND> with    { return McFunctionTypes.KEYWORD_WITH; }
+<COMMAND> from    { return McFunctionTypes.KEYWORD_FROM; }
 
 x|y|z          { return McFunctionTypes.SELECTOR_ARGUMENT_XYZ; }
 distance       { return McFunctionTypes.SELECTOR_ARGUMENT_DISTANCE; }
@@ -106,9 +106,9 @@ predicate      { return McFunctionTypes.SELECTOR_ARGUMENT_PREDICATE; }
 @e { return McFunctionTypes.TOK_AT_E; }
 @s { return McFunctionTypes.TOK_AT_S; }
 
-eyes|feet                             { return McFunctionTypes.ENTITY_ANCHOR; }
-spectator|survival|creative|adventure { return McFunctionTypes.GAMEMODE_KEYWORDS; }
-nearest|furthest|random|arbitrary     { return McFunctionTypes.SORT_KEYWORDS; }
+eyes|feet                             { return McFunctionTypes.ENUM_ENTITY_ANCHOR; }
+spectator|survival|creative|adventure { return McFunctionTypes.ENUM_GAMEMODE; }
+nearest|furthest|random|arbitrary     { return McFunctionTypes.ENUM_SORT; }
 
 {UUID}              { return McFunctionTypes.UUID; }
 {PLAYER_PSEUDO}     { return McFunctionTypes.PLAYER_PSEUDO; }

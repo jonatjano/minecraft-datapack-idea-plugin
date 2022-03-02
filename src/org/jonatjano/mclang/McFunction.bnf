@@ -22,38 +22,38 @@ mcFunctionFile ::= item_*
 
 private item_ ::= (command|COMMENT|CRLF)
 
-vec3 ::= (float float float)|(TOK_TILDE float? TOK_TILDE float? TOK_TILDE float?)|(TOK_CIRCONFLEX float? TOK_CIRCONFLEX float? TOK_CIRCONFLEX float?)
+vec3 ::= (float float float)|(SYMBOL_TILDE float? SYMBOL_TILDE float? SYMBOL_TILDE float?)|(SYMBOL_CIRCONFLEX float? SYMBOL_CIRCONFLEX float? SYMBOL_CIRCONFLEX float?)
 u_integer ::= INTEGER_ONE|INTEGER_NOT_ONE
 integer ::= u_integer|INTEGER_SIGNED
 u_float ::= U_FLOAT_RULE|u_integer
 float ::= integer|u_float|FLOAT_SIGNED
-integer_range ::= (integer TOK_DOT TOK_DOT integer)|(integer TOK_DOT TOK_DOT)|(TOK_DOT TOK_DOT integer)|integer
-u_float_range ::= (u_float TOK_DOT TOK_DOT u_float)|(u_float TOK_DOT TOK_DOT)|(TOK_DOT TOK_DOT u_float)|u_float
-float_range ::= (float TOK_DOT TOK_DOT float)|(float TOK_DOT TOK_DOT)|(TOK_DOT TOK_DOT float)|float
+integer_range ::= (integer SYMBOL_DOT SYMBOL_DOT integer)|(integer SYMBOL_DOT SYMBOL_DOT)|(SYMBOL_DOT SYMBOL_DOT integer)|integer
+u_float_range ::= (u_float SYMBOL_DOT SYMBOL_DOT u_float)|(u_float SYMBOL_DOT SYMBOL_DOT)|(SYMBOL_DOT SYMBOL_DOT u_float)|u_float
+float_range ::= (float SYMBOL_DOT SYMBOL_DOT float)|(float SYMBOL_DOT SYMBOL_DOT)|(SYMBOL_DOT SYMBOL_DOT float)|float
 
 mob_effect ::= word|integer
-item_slot ::= (word TOK_DOT word)|(word TOK_DOT integer)|word|integer
-item_stack ::= (word TOK_COLON)?word nbt_object
-fractional ::= float (TOK_FRACTIONAL float)?
-resource_location ::= (word TOK_COLON)? word (TOK_SLASH word)*
-resource_location_tag ::= TOK_HASH? resource_location
-word ::= PLAYER_PSEUDO|WORD_RULE|GAMEMODE_KEYWORDS|ENTITY_ANCHOR
-string_single_quote_child ::= TOK_SINGLE_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH)* TOK_SINGLE_QUOTE
-string_dual_quote_child ::= TOK_DUAL_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH)* TOK_DUAL_QUOTE
-string_single_quote_parent ::= TOK_SINGLE_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_BACKSLASH|string_dual_quote_child)* TOK_SINGLE_QUOTE
-string_dual_quote_parent ::= TOK_DUAL_QUOTE (ANY_NO_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH|string_single_quote_child)* TOK_DUAL_QUOTE
+item_slot ::= (word SYMBOL_DOT word)|(word SYMBOL_DOT integer)|word|integer
+item_stack ::= (word SYMBOL_COLON)?word nbt_object
+fractional ::= float (SYMBOL_FRACTIONAL float)?
+resource_location ::= (word SYMBOL_COLON)? word (SYMBOL_SLASH word)*
+resource_location_tag ::= SYMBOL_HASH? resource_location
+word ::= PLAYER_PSEUDO|WORD_RULE|ENUM_GAMEMODE|ENUM_ENTITY_ANCHOR
+string_single_quote_child ::= SYMBOL_SINGLE_QUOTE (ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH)* SYMBOL_SINGLE_QUOTE
+string_dual_quote_child ::= SYMBOL_DUAL_QUOTE (ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH)* SYMBOL_DUAL_QUOTE
+string_single_quote_parent ::= SYMBOL_SINGLE_QUOTE (ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_BACKSLASH|string_dual_quote_child)* SYMBOL_SINGLE_QUOTE
+string_dual_quote_parent ::= SYMBOL_DUAL_QUOTE (ANY_NO_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH|string_single_quote_child)* SYMBOL_DUAL_QUOTE
 string_no_quote ::= (word|WHITE_SPACE)+
 string ::= string_single_quote_parent|string_dual_quote_parent|string_no_quote
 
-string_single_quote_child_with_selectors ::= TOK_SINGLE_QUOTE (entities|ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH)* TOK_SINGLE_QUOTE
-string_dual_quote_child_with_selectors ::= TOK_DUAL_QUOTE (entities|ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH)* TOK_DUAL_QUOTE
-string_single_quote_parent_with_selectors ::= TOK_SINGLE_QUOTE (entities|ANY_NO_QUOTE|TOK_CANCELLED_SINGLE_QUOTE|TOK_CANCELLED_BACKSLASH|string_dual_quote_child_with_selectors)* TOK_SINGLE_QUOTE
-string_dual_quote_parent_with_selectors ::= TOK_DUAL_QUOTE (entities|ANY_NO_QUOTE|TOK_CANCELLED_DUAL_QUOTE|TOK_CANCELLED_BACKSLASH|string_single_quote_child_with_selectors)* TOK_DUAL_QUOTE
+string_single_quote_child_with_selectors ::= SYMBOL_SINGLE_QUOTE (entities|ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH)* SYMBOL_SINGLE_QUOTE
+string_dual_quote_child_with_selectors ::= SYMBOL_DUAL_QUOTE (entities|ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH)* SYMBOL_DUAL_QUOTE
+string_single_quote_parent_with_selectors ::= SYMBOL_SINGLE_QUOTE (entities|ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_BACKSLASH|string_dual_quote_child_with_selectors)* SYMBOL_SINGLE_QUOTE
+string_dual_quote_parent_with_selectors ::= SYMBOL_DUAL_QUOTE (entities|ANY_NO_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH|string_single_quote_child_with_selectors)* SYMBOL_DUAL_QUOTE
 string_no_quote_with_selectors ::= (word|entities|WHITE_SPACE)+
 string_with_selectors ::= string_single_quote_parent_with_selectors|string_dual_quote_parent_with_selectors|string_no_quote_with_selectors
 
-nbt_object ::= TOK_OPEN_CURLY word TOK_COLON nbt_value(TOK_COMMA word TOK_COLON nbt_value)* TOK_CLOSE_CURLY
-nbt_array ::= TOK_OPEN_SQUARE (ARRAY_TYPE_MARKER TOK_SEMI_COLON)? (nbt_value(TOK_COMMA nbt_value)*)? TOK_CLOSE_SQUARE
+nbt_object ::= SYMBOL_OPEN_CURLY word SYMBOL_COLON nbt_value(SYMBOL_COMMA word SYMBOL_COLON nbt_value)* SYMBOL_CLOSE_CURLY
+nbt_array ::= SYMBOL_OPEN_SQUARE (ARRAY_TYPE_MARKER SYMBOL_SEMI_COLON)? (nbt_value(SYMBOL_COMMA nbt_value)*)? SYMBOL_CLOSE_SQUARE
 nbt_value ::= nbt_object|nbt_array|BOOLEAN|integer|float|string
 
 // ------------------------------------------------------------------
@@ -61,25 +61,25 @@ nbt_value ::= nbt_object|nbt_array|BOOLEAN|integer|float|string
 // ------------------------------------------------------------------
 
 // positional
-position_argument ::= SELECTOR_ARGUMENT_XYZ TOK_EQUAL float
-distance_argument ::= SELECTOR_ARGUMENT_DISTANCE TOK_EQUAL u_float_range
-volume_argument ::= SELECTOR_ARGUMENT_DXYZ TOK_EQUAL fractional
+position_argument ::= SELECTOR_ARGUMENT_XYZ SYMBOL_EQUAL float
+distance_argument ::= SELECTOR_ARGUMENT_DISTANCE SYMBOL_EQUAL u_float_range
+volume_argument ::= SELECTOR_ARGUMENT_DXYZ SYMBOL_EQUAL fractional
 
 // scoreboard value
-scores_argument ::= SELECTOR_ARGUMENT_SCORES TOK_EQUAL TOK_OPEN_CURLY word TOK_EQUAL integer_range(TOK_COMMA word TOK_EQUAL integer_range)*TOK_CLOSE_CURLY
-tag_argument ::= SELECTOR_ARGUMENT_TAG TOK_EQUAL TOK_NEGATE?word?
-team_argument ::= SELECTOR_ARGUMENT_TEAM TOK_EQUAL TOK_NEGATE?word?
+scores_argument ::= SELECTOR_ARGUMENT_SCORES SYMBOL_EQUAL SYMBOL_OPEN_CURLY word SYMBOL_EQUAL integer_range(SYMBOL_COMMA word SYMBOL_EQUAL integer_range)*SYMBOL_CLOSE_CURLY
+tag_argument ::= SELECTOR_ARGUMENT_TAG SYMBOL_EQUAL SYMBOL_NEGATE?word?
+team_argument ::= SELECTOR_ARGUMENT_TEAM SYMBOL_EQUAL SYMBOL_NEGATE?word?
 
 // traits
-sort_argument ::= SELECTOR_ARGUMENT_SORT TOK_EQUAL SORT_KEYWORDS
-level_argument ::= SELECTOR_ARGUMENT_LEVEL TOK_EQUAL integer_range
-gamemode_argument ::= SELECTOR_ARGUMENT_GAMEMODE TOK_EQUAL TOK_NEGATE?GAMEMODE_KEYWORDS
-name_argument ::= SELECTOR_ARGUMENT_NAME TOK_EQUAL TOK_NEGATE?word
-rotation_argument ::= SELECTOR_ARGUMENT_XY_ROTATION TOK_EQUAL float_range
-type_argument ::= SELECTOR_ARGUMENT_TYPE TOK_EQUAL TOK_NEGATE?resource_location_tag
-nbt_argument ::= SELECTOR_ARGUMENT_NBT TOK_EQUAL nbt_object
-advancements_argument ::= SELECTOR_ARGUMENT_ADVANCEMENTS TOK_EQUAL TOK_OPEN_CURLY resource_location TOK_EQUAL (BOOLEAN|(TOK_OPEN_CURLY word TOK_EQUAL BOOLEAN(TOK_COMMA word TOK_EQUAL BOOLEAN)* TOK_CLOSE_CURLY))TOK_CLOSE_CURLY
-predicate_argument ::= SELECTOR_ARGUMENT_PREDICATE TOK_EQUAL TOK_NEGATE?resource_location
+sort_argument ::= SELECTOR_ARGUMENT_SORT SYMBOL_EQUAL ENUM_SORT
+level_argument ::= SELECTOR_ARGUMENT_LEVEL SYMBOL_EQUAL integer_range
+gamemode_argument ::= SELECTOR_ARGUMENT_GAMEMODE SYMBOL_EQUAL SYMBOL_NEGATE?ENUM_GAMEMODE
+name_argument ::= SELECTOR_ARGUMENT_NAME SYMBOL_EQUAL SYMBOL_NEGATE?word
+rotation_argument ::= SELECTOR_ARGUMENT_XY_ROTATION SYMBOL_EQUAL float_range
+type_argument ::= SELECTOR_ARGUMENT_TYPE SYMBOL_EQUAL SYMBOL_NEGATE?resource_location_tag
+nbt_argument ::= SELECTOR_ARGUMENT_NBT SYMBOL_EQUAL nbt_object
+advancements_argument ::= SELECTOR_ARGUMENT_ADVANCEMENTS SYMBOL_EQUAL SYMBOL_OPEN_CURLY resource_location SYMBOL_EQUAL (BOOLEAN|(SYMBOL_OPEN_CURLY word SYMBOL_EQUAL BOOLEAN(SYMBOL_COMMA word SYMBOL_EQUAL BOOLEAN)* SYMBOL_CLOSE_CURLY))SYMBOL_CLOSE_CURLY
+predicate_argument ::= SELECTOR_ARGUMENT_PREDICATE SYMBOL_EQUAL SYMBOL_NEGATE?resource_location
 
 entity_selector_argument_no_limit ::=
     position_argument|distance_argument|volume_argument|
@@ -87,11 +87,11 @@ entity_selector_argument_no_limit ::=
     sort_argument|level_argument|gamemode_argument|name_argument|rotation_argument|type_argument|nbt_argument|advancements_argument|predicate_argument
 entity_selector_argument ::= entity_selector_argument_no_limit|limit_argument
 
-limit_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL u_integer {pin=1}
-limit_1_argument ::= SELECTOR_ARGUMENT_LIMIT TOK_EQUAL INTEGER_ONE {pin=1}
+limit_argument ::= SELECTOR_ARGUMENT_LIMIT SYMBOL_EQUAL u_integer {pin=1}
+limit_1_argument ::= SELECTOR_ARGUMENT_LIMIT SYMBOL_EQUAL INTEGER_ONE {pin=1}
 
-limit_1_entity_selector_argument_block ::= TOK_OPEN_SQUARE (limit_1_argument|entity_selector_argument_no_limit)(TOK_COMMA (limit_1_argument|entity_selector_argument_no_limit))* TOK_CLOSE_SQUARE
-entity_selector_argument_block ::= TOK_OPEN_SQUARE (entity_selector_argument)(TOK_COMMA entity_selector_argument)* TOK_CLOSE_SQUARE
+limit_1_entity_selector_argument_block ::= SYMBOL_OPEN_SQUARE (limit_1_argument|entity_selector_argument_no_limit)(SYMBOL_COMMA (limit_1_argument|entity_selector_argument_no_limit))* SYMBOL_CLOSE_SQUARE
+entity_selector_argument_block ::= SYMBOL_OPEN_SQUARE (entity_selector_argument)(SYMBOL_COMMA entity_selector_argument)* SYMBOL_CLOSE_SQUARE
 
 base_unique_entity_selector ::= TOK_AT_P|TOK_AT_R
 base_multi_entity_selector ::= TOK_AT_A|TOK_AT_E
@@ -127,7 +127,7 @@ advancement (grant|revoke) <targets> until <advancement>
 <advancement> resource_location
 <criterion> string
  */
-// advancementCommand := ADVANCEMENT TOK_GRANT_OR_REVOKE entities (TOK_EVERYTHING|(TOK_ONLY RESOURCE_LOCATION CRITERION?)|(TOK_ADVANCEMENT_LIMITS RESOURCE_LOCATION))
+// advancementCommand := ADVANCEMENT SYMBOL_GRANT_OR_REVOKE entities (SYMBOL_EVERYTHING|(SYMBOL_ONLY RESOURCE_LOCATION CRITERION?)|(SYMBOL_ADVANCEMENT_LIMITS RESOURCE_LOCATION))
 
 // attribute
 /*
@@ -185,7 +185,7 @@ effect give <targets> <effect> [<seconds>] [<amplifier>] [<hideParticles>]
 <amplifier> u_integer
 <hideParticles> boolean
  */
-effectCommand ::= COMMAND_EFFECT (KEY_CLEAR effectClearArguments)|(KEY_GIVE effectGiveArguments) {pin=1}
+effectCommand ::= COMMAND_EFFECT (KEYWORD_CLEAR effectClearArguments)|(KEYWORD_GIVE effectGiveArguments) {pin=1}
 effectClearArguments ::= entities? mob_effect?
 effectGiveArguments ::= entities mob_effect integer? integer? BOOLEAN?
 
@@ -203,7 +203,7 @@ effectGiveArguments ::= entities mob_effect integer? integer? BOOLEAN?
 functionCommand ::= COMMAND_FUNCTION resource_location_tag {pin=1}
 
 // gamemode
-gamemodeCommand ::= COMMAND_GAMEMODE GAMEMODE_KEYWORDS entities? {pin=1}
+gamemodeCommand ::= COMMAND_GAMEMODE ENUM_GAMEMODE entities? {pin=1}
 
 // gamerule
 
@@ -218,9 +218,9 @@ item replace (block <pos>|entity <targets>) <slot> with <item> [<count>]
 item replace (block <pos>|entity <targets>) <slot> from (block <sourcePos>|entity <sourceTarget>) <sourceSlot> [<modifier>]
  */
 itemCommand ::= COMMAND_ITEM itemReplaceArguments|itemModifyArguments {pin=1}
-itemCommonArguments ::= (KEY_BLOCK vec3)|(KEY_ENTITY entities) item_slot
-itemModifyArguments ::= KEY_MODIFY itemCommonArguments resource_location
-itemReplaceArguments ::= KEY_REPLACE itemCommonArguments (KEY_WITH item_stack integer?)|(KEY_FROM itemCommonArguments) resource_location?
+itemCommonArguments ::= (KEYWORD_BLOCK vec3)|(KEYWORD_ENTITY entities) item_slot
+itemModifyArguments ::= KEYWORD_MODIFY itemCommonArguments resource_location
+itemReplaceArguments ::= KEYWORD_REPLACE itemCommonArguments (KEYWORD_WITH item_stack integer?)|(KEYWORD_FROM itemCommonArguments) resource_location?
 
 // jfr
 
@@ -300,7 +300,7 @@ killCommand ::= COMMAND_KILL entities {pin=1}
 // teleport
 tpCommand ::= COMMAND_TELEPORT ((entities entity)|(entities tpVecArgs)|entity|tpVecArgs) {pin=1}
 tpVecArgs ::= vec3 (float|tpFacingArg)?
-tpFacingArg ::= KEY_FACING (vec3|(KEY_ENTITY entity)) ENTITY_ANCHOR?
+tpFacingArg ::= KEYWORD_FACING (vec3|(KEYWORD_ENTITY entity)) ENUM_ENTITY_ANCHOR?
 
 // tell
 
