@@ -20,7 +20,9 @@ public class McFunctionColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor("Comment", McFunctionSyntaxHighlighter.COMMENT),
         new AttributesDescriptor("Number", McFunctionSyntaxHighlighter.NUMBER),
         new AttributesDescriptor("Command", McFunctionSyntaxHighlighter.COMMAND),
-        new AttributesDescriptor("Bad character", McFunctionSyntaxHighlighter.BAD_CHARACTER)
+        new AttributesDescriptor("Bad character", McFunctionSyntaxHighlighter.BAD_CHARACTER),
+        new AttributesDescriptor("Symbol", McFunctionSyntaxHighlighter.SYMBOL),
+        new AttributesDescriptor("Selector argument", McFunctionSyntaxHighlighter.SELECTOR_ARGUMENT)
     };
 
     @Nullable
@@ -40,6 +42,11 @@ public class McFunctionColorSettingsPage implements ColorSettingsPage {
     public String getDemoText() {
         return "# comments starts with #.\n" +
             "teleport 1 1 1 facing entity jonatjano feet\n" +
+            "kill @a[nbt={OnGround:true}]\n" +
+            "kill @e[type=sheep,nbt={Color:0b}]\n" +
+            "kill @e[type=item,nbt={Item:{id:\"minec\\\\raft:sl\\\"ime_ball\"}}]\n" +
+            "kill @e[nbt={Tags:[\"a\",b]}]\n" +
+            "kill @e[tag=a,tag=b]\n" +
             "error";
     }
 

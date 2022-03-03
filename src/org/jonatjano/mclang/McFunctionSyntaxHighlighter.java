@@ -8,6 +8,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
+import org.jonatjano.mclang.psi.McFunctionTokenType;
 import org.jonatjano.mclang.psi.McFunctionTypes;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
@@ -26,6 +27,10 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("MC_FUNCTION_NUMBER", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey COMMAND =
             createTextAttributesKey("MC_FUNCTION_COMMAND", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey SYMBOL =
+            createTextAttributesKey("MC_FUNCTION_SYMBOL", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey SELECTOR_ARGUMENT =
+            createTextAttributesKey("MC_FUNCTION_SELECTOR_ARGUMENT", DefaultLanguageHighlighterColors.INSTANCE_METHOD);
     public static final TextAttributesKey BAD_CHARACTER =
             createTextAttributesKey("MC_FUNCTION_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER);
 
@@ -36,6 +41,8 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
     private static final TextAttributesKey[] COMMAND_KEYS = new TextAttributesKey[]{COMMAND};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
+    private static final TextAttributesKey[] SYMBOL_KEYS = new TextAttributesKey[]{SYMBOL};
+    private static final TextAttributesKey[] SELECTOR_ARGUMENT_KEYS = new TextAttributesKey[]{SELECTOR_ARGUMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
     @NotNull
@@ -50,21 +57,30 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType.equals(McFunctionTypes.COMMENT)) {
             return COMMENT_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.COMMAND_KILL) ||
-            tokenType.equals(McFunctionTypes.COMMAND_TELEPORT)) {
+        if (tokenType.toString().startsWith("McFunctionTokenType.COMMAND")) {
             return COMMAND_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.KEY_FACING) ||
-            tokenType.equals(McFunctionTypes.KEY_ENTITY)) {
-            return KEYWORD_KEYS;
-        }
-        if (tokenType.equals(McFunctionTypes.ENTITY_ANCHOR)) {
+        if (tokenType.toString().startsWith("McFunctionTokenType.ENUM")) {
             return ENUM_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.ENTITY)) {
+        if (tokenType.toString().startsWith("McFunctionTokenType.KEYWORD")) {
+            return KEYWORD_KEYS;
+        }
+        if (tokenType.toString().startsWith("McFunctionTokenType.SYMBOL")) {
+            return SYMBOL_KEYS;
+        }
+        if (tokenType.toString().startsWith("McFunctionTokenType.SELECTOR_ARGUMENT")) {
+            return SELECTOR_ARGUMENT_KEYS;
+        }
+        if (tokenType.equals(McFunctionTypes.STRING)) {
             return STRING_KEYS;
         }
-        if (tokenType.equals(McFunctionTypes.VEC_3)) {
+        if (tokenType.equals(McFunctionTypes.INTEGER_ONE) ||
+            tokenType.equals(McFunctionTypes.INTEGER_NOT_ONE) ||
+            tokenType.equals(McFunctionTypes.INTEGER_SIGNED) ||
+            tokenType.equals(McFunctionTypes.U_FLOAT_RULE) ||
+            tokenType.equals(McFunctionTypes.FLOAT_SIGNED)
+        ) {
             return NUMBER_KEYS;
         }
         if (tokenType.equals(TokenType.BAD_CHARACTER)) {
