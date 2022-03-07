@@ -22,6 +22,8 @@ public class McFunctionColorSettingsPage implements ColorSettingsPage {
         new AttributesDescriptor("Command", McFunctionSyntaxHighlighter.COMMAND),
         new AttributesDescriptor("Bad character", McFunctionSyntaxHighlighter.BAD_CHARACTER),
         new AttributesDescriptor("Symbol", McFunctionSyntaxHighlighter.SYMBOL),
+        new AttributesDescriptor("Braces", McFunctionSyntaxHighlighter.CURLY_BRACKETS),
+        new AttributesDescriptor("Brackets", McFunctionSyntaxHighlighter.SQUARE_BRACKETS),
         new AttributesDescriptor("Selector argument", McFunctionSyntaxHighlighter.SELECTOR_ARGUMENT)
     };
 

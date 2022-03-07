@@ -29,6 +29,10 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("MC_FUNCTION_COMMAND", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey SYMBOL =
             createTextAttributesKey("MC_FUNCTION_SYMBOL", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey CURLY_BRACKETS =
+            createTextAttributesKey("MC_FUNCTION_CURLY_BRACKETS", DefaultLanguageHighlighterColors.BRACES);
+    public static final TextAttributesKey SQUARE_BRACKETS =
+            createTextAttributesKey("MC_FUNCTION_SQUARE_BRACKETS", DefaultLanguageHighlighterColors.BRACKETS);
     public static final TextAttributesKey SELECTOR_ARGUMENT =
             createTextAttributesKey("MC_FUNCTION_SELECTOR_ARGUMENT", DefaultLanguageHighlighterColors.INSTANCE_METHOD);
     public static final TextAttributesKey BAD_CHARACTER =
@@ -42,6 +46,8 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] COMMAND_KEYS = new TextAttributesKey[]{COMMAND};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{COMMENT};
     private static final TextAttributesKey[] SYMBOL_KEYS = new TextAttributesKey[]{SYMBOL};
+    private static final TextAttributesKey[] CURLY_BRACKETS_KEYS = new TextAttributesKey[]{CURLY_BRACKETS};
+    private static final TextAttributesKey[] SQUARE_BRACKETS_KEYS = new TextAttributesKey[]{SQUARE_BRACKETS};
     private static final TextAttributesKey[] SELECTOR_ARGUMENT_KEYS = new TextAttributesKey[]{SELECTOR_ARGUMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
@@ -57,6 +63,28 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
         if (tokenType.equals(McFunctionTypes.COMMENT)) {
             return COMMENT_KEYS;
         }
+        if (tokenType.equals(McFunctionTypes.STRING)) {
+            return STRING_KEYS;
+        }
+        if (tokenType.equals(McFunctionTypes.SYMBOL_OPEN_CURLY) ||
+            tokenType.equals(McFunctionTypes.SYMBOL_CLOSE_CURLY)) {
+            return CURLY_BRACKETS_KEYS;
+        }
+        if (tokenType.equals(McFunctionTypes.SYMBOL_OPEN_SQUARE) ||
+            tokenType.equals(McFunctionTypes.SYMBOL_CLOSE_SQUARE)) {
+            return SQUARE_BRACKETS_KEYS;
+        }
+        if (tokenType.equals(McFunctionTypes.INTEGER_ONE) ||
+            tokenType.equals(McFunctionTypes.INTEGER_NOT_ONE) ||
+            tokenType.equals(McFunctionTypes.INTEGER_SIGNED) ||
+            tokenType.equals(McFunctionTypes.U_FLOAT_RULE) ||
+            tokenType.equals(McFunctionTypes.FLOAT_SIGNED)
+        ) {
+            return NUMBER_KEYS;
+        }
+        if (tokenType.equals(TokenType.BAD_CHARACTER)) {
+            return BAD_CHAR_KEYS;
+        }
         if (tokenType.toString().startsWith("McFunctionTokenType.COMMAND")) {
             return COMMAND_KEYS;
         }
@@ -71,20 +99,6 @@ public class McFunctionSyntaxHighlighter extends SyntaxHighlighterBase {
         }
         if (tokenType.toString().startsWith("McFunctionTokenType.SELECTOR_ARGUMENT")) {
             return SELECTOR_ARGUMENT_KEYS;
-        }
-        if (tokenType.equals(McFunctionTypes.STRING)) {
-            return STRING_KEYS;
-        }
-        if (tokenType.equals(McFunctionTypes.INTEGER_ONE) ||
-            tokenType.equals(McFunctionTypes.INTEGER_NOT_ONE) ||
-            tokenType.equals(McFunctionTypes.INTEGER_SIGNED) ||
-            tokenType.equals(McFunctionTypes.U_FLOAT_RULE) ||
-            tokenType.equals(McFunctionTypes.FLOAT_SIGNED)
-        ) {
-            return NUMBER_KEYS;
-        }
-        if (tokenType.equals(TokenType.BAD_CHARACTER)) {
-            return BAD_CHAR_KEYS;
         }
         return EMPTY_KEYS;
     }
