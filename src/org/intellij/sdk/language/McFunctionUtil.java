@@ -1,4 +1,4 @@
-package org.jonatjano.mclang;
+package org.intellij.sdk.language;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -6,8 +6,8 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jonatjano.mclang.psi.McFunctionFile;
-import org.jonatjano.mclang.psi.McFunctionResourceLocation;
+import org.intellij.sdk.language.psi.McFunctionFile;
+import org.intellij.sdk.language.psi.McFunctionResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Collection;

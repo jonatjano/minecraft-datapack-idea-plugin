@@ -1,9 +1,8 @@
-package org.jonatjano.mclang;
+package org.intellij.sdk.language;
 
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.TokenType;
-import com.intellij.lexer.FlexLexer;
-import org.jonatjano.mclang.psi.McFunctionTypes;
+import org.intellij.sdk.language.psi.McFunctionTypes;
 
 %%
 

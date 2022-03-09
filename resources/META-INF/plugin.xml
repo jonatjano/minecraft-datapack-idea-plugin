@@ -22,18 +22,18 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <fileType name="Minecraft Function"
-              implementationClass="org.jonatjano.mclang.McFunctionFileType"
+              implementationClass="org.intellij.sdk.language.McFunctionFileType"
               fieldName="INSTANCE"
               language="Minecraft Function"
               extensions="mcfunction"/>
 
     <lang.parserDefinition language="Minecraft Function"
-                           implementationClass="org.jonatjano.mclang.McFunctionParserDefinition"/>
+                           implementationClass="org.intellij.sdk.language.McFunctionParserDefinition"/>
 
     <lang.syntaxHighlighterFactory language="Minecraft Function"
-                                   implementationClass="org.jonatjano.mclang.McFunctionSyntaxHighlighterFactory"/>
+                                   implementationClass="org.intellij.sdk.language.McFunctionSyntaxHighlighterFactory"/>
 
-    <colorSettingsPage implementation="org.jonatjano.mclang.McFunctionColorSettingsPage"/>
+    <colorSettingsPage implementation="org.intellij.sdk.language.McFunctionColorSettingsPage"/>
   </extensions>
 
   <actions>
