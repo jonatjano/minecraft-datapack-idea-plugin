@@ -11,8 +11,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import org.intellij.sdk.language.parser.McFunctionParser;
 import org.jetbrains.annotations.NotNull;
+import org.jonatjano.mclang.parser.McFunctionParser;
 import org.jonatjano.mclang.psi.McFunctionFile;
 import org.jonatjano.mclang.psi.McFunctionTypes;
 

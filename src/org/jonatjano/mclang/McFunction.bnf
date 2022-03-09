@@ -1,16 +1,18 @@
 {
-    parserClass="org.intellij.sdk.language.parser.McFunctionParser"
+    parserClass="org.jonatjano.mclang.parser.McFunctionParser"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
     psiClassPrefix="McFunction"
     psiImplClassSuffix="Impl"
-    psiPackage="org.intellij.sdk.language.psi"
-    psiImplPackage="org.intellij.sdk.language.psi.impl"
+    psiPackage="org.jonatjano.mclang.psi"
+    psiImplPackage="org.jonatjano.mclang.psi.impl"
 
     elementTypeHolderClass="org.jonatjano.mclang.psi.McFunctionTypes"
     elementTypeClass="org.jonatjano.mclang.psi.McFunctionElementType"
     tokenTypeClass="org.jonatjano.mclang.psi.McFunctionTokenType"
+
+    psiImplUtilClass="org.jonatjano.mclang.psi.impl.McFunctionImplUtil"
 }
 //simpleFile ::= item_*
 //
@@ -35,7 +37,7 @@ mob_effect ::= word|integer
 item_slot ::= (word SYMBOL_DOT word)|(word SYMBOL_DOT integer)|word|integer
 item_stack ::= (word SYMBOL_COLON)?word nbt_object
 fractional ::= float (SYMBOL_FRACTIONAL float)?
-resource_location ::= (word SYMBOL_COLON)? word (SYMBOL_SLASH word)*
+resource_location ::= (word SYMBOL_COLON)? word (SYMBOL_SLASH word)* {methods=[getNamespace getPath]}
 resource_location_tag ::= SYMBOL_HASH? resource_location
 word ::= PLAYER_PSEUDO|WORD_RULE|ENUM_GAMEMODE|ENUM_ENTITY_ANCHOR
 string_single_quote_child ::= SYMBOL_SINGLE_QUOTE (ANY_NO_QUOTE|SYMBOL_CANCELLED_SINGLE_QUOTE|SYMBOL_CANCELLED_DUAL_QUOTE|SYMBOL_CANCELLED_BACKSLASH)* SYMBOL_SINGLE_QUOTE
