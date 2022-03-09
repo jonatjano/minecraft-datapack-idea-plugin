@@ -1,4 +1,4 @@
-package org.intellij.sdk.language;
+package org.jonatjano.mclang;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.NotNull;

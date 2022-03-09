@@ -1,4 +1,4 @@
-package org.intellij.sdk.language;
+package org.jonatjano.mclang;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -12,9 +12,9 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
-import org.intellij.sdk.language.parser.McFunctionParser;
-import org.intellij.sdk.language.psi.McFunctionFile;
-import org.intellij.sdk.language.psi.McFunctionTypes;
+import org.jonatjano.mclang.parser.McFunctionParser;
+import org.jonatjano.mclang.psi.McFunctionFile;
+import org.jonatjano.mclang.psi.McFunctionTypes;
 
 public class McFunctionParserDefinition implements ParserDefinition {
 

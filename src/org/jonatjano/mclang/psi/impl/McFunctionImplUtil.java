@@ -1,10 +1,11 @@
-package org.intellij.sdk.language.psi.impl;
+package org.jonatjano.mclang.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import org.intellij.sdk.language.psi.McFunctionResourceLocation;
-import org.intellij.sdk.language.psi.McFunctionTypes;
+import org.jonatjano.mclang.psi.McFunctionResourceLocation;
+import org.jonatjano.mclang.psi.McFunctionTypes;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class McFunctionImplUtil {
     public static String getNamespace(McFunctionResourceLocation element) {

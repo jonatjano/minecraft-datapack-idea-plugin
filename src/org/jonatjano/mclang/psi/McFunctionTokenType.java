@@ -1,7 +1,7 @@
-package org.intellij.sdk.language.psi;
+package org.jonatjano.mclang.psi;
 
 import com.intellij.psi.tree.IElementType;
-import org.intellij.sdk.language.McFunctionLanguage;
+import org.jonatjano.mclang.McFunctionLanguage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

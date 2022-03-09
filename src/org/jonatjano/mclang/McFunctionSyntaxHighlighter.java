@@ -1,4 +1,4 @@
-package org.intellij.sdk.language;
+package org.jonatjano.mclang;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -8,7 +8,8 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
-import org.intellij.sdk.language.psi.McFunctionTypes;
+import org.jonatjano.mclang.psi.McFunctionTokenType;
+import org.jonatjano.mclang.psi.McFunctionTypes;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 

@@ -1,4 +1,4 @@
-package org.intellij.sdk.language;
+package org.jonatjano.mclang;
 
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
